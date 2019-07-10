@@ -8,9 +8,9 @@ const cwd = process.cwd();
 exports.resolveFileConfig = function resolveFileConfig() {
   const argv = minimist(process.argv.slice(2));
   let input, output;
-  if (argv._.length >= 2) {
-    input = argv._[0];
-    output = argv._[1];
+  if (argv._.length >= 3) {
+    input = argv._[1];
+    output = argv._[2];
   } else if (argv.config) {
     try {
       const config = require(path.resolve(cwd, argv.config));

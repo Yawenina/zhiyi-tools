@@ -5,58 +5,60 @@
 const fs = require('fs').promises;
 const fsExtra = require('fs-extra');
 const debug = require('debug')('zhiyi-tools');
+const chalk = require('chalk');
 const path = require('path');
 const cwd = process.cwd();
+const camelCase = require('lodash/camelCase');
 const result = [];
 const output = {};
+const moduleOutput = {};
 
 function walkFiles(folder) {
-  return new Promise((resolve, reject) => {
-    fs.readdir(folder)
-      .then((files) => {
-        const filePromises = files.map(file => {
-          const directFilePath = path.resolve(cwd, folder, file);
-          return fs.lstat(directFilePath).then(stats => {
+  return fs.readdir(folder)
+    .then((files) => {
+      const filePromises = files.map(file => {
+        const absolutPath = path.resolve(cwd, folder, file);
+        return fs.lstat(absolutPath)
+          .then(stats => {
             if (stats.isDirectory()) {
-              return walkFiles(directFilePath);
+              return walkFiles(absolutPath);
             } else {
-              if (path.basename(directFilePath).endsWith('-cmd.js')) {
-                const content = require(directFilePath);
-                result.push(directFilePath);
-                output[content.name] = content.action;
+              if (path.basename(absolutPath).endsWith('-cmd.js')) {
+                const content = require(absolutPath);
+                result.push(absolutPath);
+                output[content.name] = {
+                  action: content.action,
+                  path: absolutPath
+                };
+                moduleOutput[content.name] = camelCase(content.name);
+                return content.name;
               }
             }
           })
-        });
-        resolve(Promise.all(filePromises));
-      })
-
-  });
+      });
+      return Promise.all(filePromises);
+    })
 }
 
 function build() {
   // 遍历文件
   walkFiles(path.resolve(cwd, './src/commands/'))
-    .then((res) => {
-      console.log('res', res);
+    .then(() => {
       debug(`final commands %s`, result);
-      console.log(`generate ${Object.keys(result).length} commands`);
-      const content = result.map(commandPath => {
-        const path = path.basename(path.relative(path.resolve(cwd, 'src/commands'), commandPath), '.js');
-        console.log('path.toString()', path.toString());
-        return `
-          const ${path.basename(commandPath, '.js')} = require('${path.toString()}');
-        `
+      console.log(chalk.green(`generate ${result.length} commands: ${Object.keys(output).join(', ')}`));
+      const content = Object.entries(output).map(([key, value]) => {
+        const relativePath = path.relative(path.resolve(cwd, 'src/commands'), value.path);
+        const pathName = path.basename(relativePath, '.js');
+        return `const ${camelCase(key)} = require(\'./${relativePath}\');`.padStart(2);
       });
-      fsExtra.outputFile(path.resolve(cwd, 'src/commands/index.js'), `
-         ${content.join('\n')};
-         
-         module.exports = output
-      `)
+      fsExtra.outputFile(path.resolve(cwd, 'src/commands/index.js'),
+      `  ${content.join('\n  ')}\n
+  module.exports = {${Object.entries(moduleOutput).map(([key, value]) => `
+    \'${key}\': ${value}.action`).join(',')
+  }
+  };
+  `, { encoding: 'utf8' })
     });
 }
 
-module.exports =  {
-  name: 'build',
-  action: build
-}
+module.exports = build;
