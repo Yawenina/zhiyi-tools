@@ -1,7 +1,9 @@
 const util = require('../../utils');
+const fs = require('fs-extra');
+const debug = require('debug')('zhiyi-tools');
 
 function mcmsToIcms() {
-  const config = util.resolveConfig();
+  const config = util.resolveFileConfig();
   const messages = require(config.inputPath);
   const writeFiles = Object.keys(messages).map((key) => {
     return fs.outputJSON(`${config.outputPath}/${key}.json`, messages[key]);
