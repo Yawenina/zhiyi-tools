@@ -54,7 +54,7 @@ function build() {
       fsExtra.outputFile(path.resolve(cwd, 'src/commands/index.js'),
       `  ${content.join('\n  ')}\n
   module.exports = {${Object.entries(moduleOutput).map(([key, value]) => `
-    \'${key}\': ${value}.action`).join(',')
+    \'${key}\': ${value}`).join(',')
   }
   };
   `, { encoding: 'utf8' })
