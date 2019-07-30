@@ -2,10 +2,10 @@
 tool packages
 
 ### Usage
-- `git clone `
-- `npm install`
-- `npm link zhiyi-tool`
-- `zhiyi-tools build`
+1. `git clone https://github.com/Yawenina/zhiyi-tools`
+2. `npm install`
+3. `npm link zhiyi-tool`
+4. `zhiyi-tools build`
 
 ### Commands
 
