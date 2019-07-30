@@ -1,27 +1,17 @@
 #! /usr/bin/env node
 
-const minimist = require('minimist');
 const chalk = require('chalk');
 const program = require('commander');
 const commands = require('../src/commands');
-const build = require('../src/build');
 const pkg = require('../package');
 
 function runCommands() {
   program.version(pkg.version);
 
-  program
-    .command('build')
-    .description('build all commands')
-    .action(() => {
-      build();
-    });
-
+  // generate all commands
   Object.values(commands).forEach(cmdObj => {
     const { command, description, option = [], action } = cmdObj;
-    const currentProgram = program
-      .command(command)
-      .description(description);
+    const currentProgram = program.command(command).description(description);
 
     if (option.length) {
       option.forEach(opt => {
