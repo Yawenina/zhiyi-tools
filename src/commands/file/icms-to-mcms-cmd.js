@@ -19,6 +19,7 @@ function icmsToMcms() {
 
 module.exports = {
   name: 'icms-to-mcms',
+  command: 'icms-to-mcms',
   action: icmsToMcms,
   description: 'format icms i18n to mcms format'
 };

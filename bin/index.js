@@ -8,8 +8,6 @@ const build = require('../src/build');
 const pkg = require('../package');
 
 function runCommands() {
-  const argv = minimist(process.argv.slice(2));
-
   program.version(pkg.version);
 
   program
@@ -19,11 +17,19 @@ function runCommands() {
       build();
     });
 
-  Object.values(commands).forEach(command => {
-    program
-      .command(command.name)
-      .description(command.description)
-      .action(command.action);
+  Object.values(commands).forEach(cmdObj => {
+    const { command, description, option = [], action } = cmdObj;
+    const currentProgram = program
+      .command(command)
+      .description(description);
+
+    if (option.length) {
+      option.forEach(opt => {
+        currentProgram.option(...opt);
+      })
+    }
+
+    currentProgram.action(action);
   });
 
   program
