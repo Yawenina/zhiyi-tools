@@ -1,7 +1,7 @@
 ## Tools
-tool packages
+A tools package serves for zhiyi
 
-### Usage
+### Start
 1. `git clone https://github.com/Yawenina/zhiyi-tools`
 2. `npm install`
 3. `npm link zhiyi-tools`
