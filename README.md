@@ -1,6 +1,12 @@
 ## Tools
 tool packages
 
+### Usage
+- `git clone `
+- `npm install`
+- `npm link zhiyi-tool`
+- `zhiyi-tools build`
+
 ### Commands
 
 ### TODO
