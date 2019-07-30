@@ -13,7 +13,17 @@ const result = [];
 const output = {};
 const moduleOutput = {};
 
-function walkFiles(folder) {
+async function walkFiles(folder) {
+  const dir = await fs.readdir(folder);
+  dir.map(async file => {
+    const absolutPath = path.resolve(cwd, folder, file);
+    const isDir = await fs.lstat(absolutPath);
+    if (isDir) {
+      return walkFiles(absolutPath)
+    } else {
+
+    }
+  });
   return fs.readdir(folder)
     .then((files) => {
       const filePromises = files.map(file => {

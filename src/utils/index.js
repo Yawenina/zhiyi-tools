@@ -18,12 +18,12 @@ exports.resolveFileConfig = function resolveFileConfig() {
       input = config.input;
       output = config.output;
     } catch(err) {
-      debug('please check your config file');
+      console.error('please check your config file');
     }
   }
 
   if (!input || !output) {
-    console.error(chalk.red(`please input ${!input ? 'input' : 'output'} file path.`));
+    console.error(chalk.red(`[ERROR]: please input ${!input ? 'input' : 'output'} file path.`));
     return process.exit(0);
   }
 
