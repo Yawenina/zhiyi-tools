@@ -8,7 +8,6 @@ function setConfig(key, value) {
     ...config,
     [key]: value
   };
-  console.log('newConfig', newConfig);
   fs.outputJson(CONFIG_PATH, newConfig, { spaces: 2 });
 }
 

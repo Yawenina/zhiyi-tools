@@ -48,7 +48,7 @@ async function build() {
   const content = imports.join('\n') + '\n'
                   + '\nmodule.exports = { \n'
                   + exports.join(',\n') + '\n'
-                  + '};'
+                  + '};';
   fsExtra.outputFile(path.resolve(cwd, 'src/commands/index.js'), content, {encoding: 'utf8'});
 }
 
