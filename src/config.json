@@ -1,3 +1,4 @@
 {
-  "CREATE_FILE_PATH": "/Users/yawen.xiao/Codes/zhiyi/test"
+  "CREATE_FILE_PATH": "/Users/yawen.xiao/Codes/zhiyi/test",
+  "foo": "bar"
 }

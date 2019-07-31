@@ -18,7 +18,6 @@ async function getFilePath(filename, folderPath) {
       message: `You already has this file in path ${folderPath}. Do you want to replace it?`,
     }
   ]);
-
   if (replace) return Promise.resolve(filePath);
 
   const { filename: newFileName } = await inquirer.prompt([
@@ -28,7 +27,7 @@ async function getFilePath(filename, folderPath) {
       message: 'Input your new file name'
     }
   ]);
-  return Promise.resolve(path.resolve(folderPath, newFileName || filename));
+  return getFilePath(newFileName, folderPath);
 }
 
 async function createFile(filename, options) {
